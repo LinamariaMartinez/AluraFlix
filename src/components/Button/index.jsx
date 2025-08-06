@@ -1,3 +1,5 @@
+import styled from "styled-components";
+
 const StyledButton = styled.button`
   width: 11.26rem;
   height: 3.375rem;
@@ -20,7 +22,14 @@ const StyledButton = styled.button`
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primaryHover};
+    background-color: ${({ theme }) =>
+      theme?.colors?.primaryHover || "#2271d1"};
+  }
+
+  @media (max-width: 768px) {
+    width: 9rem;
+    height: 2.5rem;
+    font-size: 1rem;
   }
 `;
 

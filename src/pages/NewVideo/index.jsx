@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useVideo } from '../../hooks/useVideos';
+import { useState } from "react";
+import styled from "styled-components";
+import { useVideo } from "../../context/VideoContext";
+import { useNavigate } from "react-router-dom";
 
 const FormContainer = styled.div`
   padding: 20px;
   max-width: 600px;
-  margin: 0 auto;
+  margin: 2rem auto;
   background-color: #20232a;
   border-radius: 10px;
   color: white;
+  box-shadow: 0px 0px 0.75rem 0.25rem #2271d1;
+
+  @media (max-width: 768px) {
+    margin: 1rem;
+    padding: 15px;
+  }
 `;
 
 const Title = styled.h2`
   color: #61dafb;
   margin-bottom: 20px;
+  text-align: center;
+  font-size: 2rem;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const Form = styled.form`
@@ -23,81 +36,232 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  padding: 10px;
+  padding: 12px;
   font-size: 1rem;
   border: 1px solid #61dafb;
   border-radius: 5px;
   background-color: #282c34;
   color: white;
+  transition: border-color 0.3s ease;
 
   &:focus {
     outline: none;
     border-color: #21a1f1;
+    box-shadow: 0 0 5px rgba(33, 161, 241, 0.3);
+  }
+
+  &::placeholder {
+    color: #aaa;
+  }
+`;
+
+const Select = styled.select`
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #61dafb;
+  border-radius: 5px;
+  background-color: #282c34;
+  color: white;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #21a1f1;
+    box-shadow: 0 0 5px rgba(33, 161, 241, 0.3);
+  }
+
+  option {
+    background-color: #282c34;
+    color: white;
   }
 `;
 
 const Textarea = styled.textarea`
-  padding: 10px;
+  padding: 12px;
   font-size: 1rem;
   border: 1px solid #61dafb;
   border-radius: 5px;
   background-color: #282c34;
   color: white;
-  resize: none;
+  resize: vertical;
+  min-height: 100px;
 
   &:focus {
     outline: none;
     border-color: #21a1f1;
+    box-shadow: 0 0 5px rgba(33, 161, 241, 0.3);
+  }
+
+  &::placeholder {
+    color: #aaa;
   }
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
 `;
 
 const Button = styled.button`
-  padding: 10px 15px;
+  padding: 12px 20px;
   font-size: 1rem;
+  font-weight: 600;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
 
   &:first-child {
     background-color: #61dafb;
     color: #20232a;
+
+    &:hover {
+      background-color: #21a1f1;
+      transform: translateY(-2px);
+    }
   }
 
   &:last-child {
-    background-color: #e74c3c;
+    background-color: #6c757d;
     color: white;
+
+    &:hover {
+      background-color: #5a6268;
+      transform: translateY(-2px);
+    }
   }
 
-  &:hover {
-    opacity: 0.9;
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
   }
+`;
+
+const ErrorMessage = styled.span`
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: -10px;
+  margin-bottom: 5px;
 `;
 
 function NewVideo() {
   const { addVideo } = useVideo();
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [videoUrl, setVideoUrl] = useState('');
-  const [description, setDescription] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  // Estado del formulario
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "",
+    imageUrl: "",
+    videoUrl: "",
+    description: "",
+  });
+
+  // Estado para errores
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Categorías disponibles
+  const categories = ["FRONT END", "BACK END", "MOBILE"];
+
+  // Manejar cambios en inputs
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Limpiar error cuando el usuario empiece a escribir
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
+
+  // Validar formulario
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.title.trim()) {
+      newErrors.title = "El título es requerido";
+    }
+
+    if (!formData.category) {
+      newErrors.category = "La categoría es requerida";
+    }
+
+    if (!formData.videoUrl.trim()) {
+      newErrors.videoUrl = "El enlace del video es requerido";
+    } else if (!/^https?:\/\/.+/.test(formData.videoUrl)) {
+      newErrors.videoUrl = "El enlace debe ser una URL válida";
+    }
+
+    if (!formData.imageUrl.trim()) {
+      newErrors.imageUrl = "El enlace de la imagen es requerido";
+    } else if (!/^https?:\/\/.+/.test(formData.imageUrl)) {
+      newErrors.imageUrl = "El enlace debe ser una URL válida";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Manejar envío del formulario
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newVideo = {
-      id: Date.now(), // O algún ID generado automáticamente
-      title,
-      category,
-      imageUrl,
-      videoUrl,
-      description,
-    };
-    addVideo(newVideo); // Llamamos a la función para agregar el video
-    // Redirigir a la página de inicio
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const newVideo = {
+        id: Date.now(),
+        titulo: formData.title,
+        categoria: formData.category,
+        img: formData.imageUrl,
+        url: formData.videoUrl,
+        descripcion: formData.description || "Sin descripción",
+      };
+
+      await addVideo(newVideo);
+
+      // Mostrar mensaje de éxito (opcional)
+      alert("Video agregado exitosamente");
+
+      // Redirigir a home
+      navigate("/");
+    } catch (error) {
+      console.error("Error al agregar video:", error);
+      alert("Error al agregar el video. Intenta nuevamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Limpiar formulario
+  const handleReset = () => {
+    setFormData({
+      title: "",
+      category: "",
+      imageUrl: "",
+      videoUrl: "",
+      description: "",
+    });
+    setErrors({});
   };
 
   return (
@@ -107,46 +271,58 @@ function NewVideo() {
         <Input
           type="text"
           name="title"
-          placeholder="Título del video"
+          placeholder="Título del video *"
           value={formData.title}
           onChange={handleChange}
-          required
         />
-        <Input
-          type="text"
+        {errors.title && <ErrorMessage>{errors.title}</ErrorMessage>}
+
+        <Select
           name="category"
-          placeholder="Categoría"
           value={formData.category}
           onChange={handleChange}
-          required
-        />
+        >
+          <option value="">Selecciona una categoría *</option>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </Select>
+        {errors.category && <ErrorMessage>{errors.category}</ErrorMessage>}
+
         <Input
           type="url"
           name="videoUrl"
-          placeholder="Enlace del video"
+          placeholder="Enlace del video (YouTube, Vimeo, etc.) *"
           value={formData.videoUrl}
           onChange={handleChange}
-          required
         />
+        {errors.videoUrl && <ErrorMessage>{errors.videoUrl}</ErrorMessage>}
+
         <Input
           type="url"
-          name="thumbnail"
-          placeholder="Enlace de la miniatura"
-          value={formData.thumbnail}
+          name="imageUrl"
+          placeholder="Enlace de la imagen/thumbnail *"
+          value={formData.imageUrl}
           onChange={handleChange}
-          required
         />
+        {errors.imageUrl && <ErrorMessage>{errors.imageUrl}</ErrorMessage>}
+
         <Textarea
           name="description"
-          placeholder="Descripción del video"
+          placeholder="Descripción del video (opcional)"
           rows="4"
           value={formData.description}
           onChange={handleChange}
         />
+
         <ButtonGroup>
-          <Button type="submit">Guardar</Button>
-          <Button type="button" onClick={handleReset}>
-            Limpiar
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Guardando..." : "Guardar Video"}
+          </Button>
+          <Button type="button" onClick={handleReset} disabled={isSubmitting}>
+            Limpiar Campos
           </Button>
         </ButtonGroup>
       </Form>

@@ -1,8 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import logo from "../../assets/logo.png"
+import { NavLink } from "react-router-dom";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const HeaderContainer = styled.header`
   display: flex;
@@ -12,9 +10,12 @@ const HeaderContainer = styled.header`
   flex: 1;
 `;
 
-const Logo = styled.img`
-  height: 3.125rem;
+const LogoText = styled.h1`
+  color: #61dafb;
+  font-size: 1.8rem;
   margin-right: 2rem;
+  cursor: pointer;
+  font-weight: bold;
 `;
 
 const Nav = styled.nav`
@@ -23,30 +24,35 @@ const Nav = styled.nav`
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 4rem;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: #262626;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 1rem 2rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
 
   &:hover {
     background-color: #21a1f1;
   }
 `;
 
-const LinkNav = styled(NavLink)`
-  &.active button {
-    background: #000000e5;
-    border: 0.125rem solid #2271d1;
-    box-shadow: 0px 0px 0.75rem 0.25rem #2271d1 inset;
-    color: #2271d1;
-  }
-`;
-
 const NavContainer = styled.div`
-  width: 400px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+  }
 `;
 
-const StyledLink = styled(NavLink)`
+const StyledNavLink = styled(NavLink)`
+  text-decoration: none;
+
   &.active button {
     background: #000000e5;
     border: 0.125rem solid #2271d1;
@@ -56,15 +62,27 @@ const StyledLink = styled(NavLink)`
 `;
 
 const Button = styled.button`
-  padding: 0.5rem 1rem;
-  border: none;
-  background-color: ${({ theme }) => theme.colors.secondary};
-  color: ${({ theme }) => theme.colors.light};
+  width: 11.26rem;
+  height: 3.375rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.5rem;
+  text-align: center;
+  background-color: transparent;
+  color: #ffffff;
+  border: 0.125rem solid #f5f5f5;
+  border-radius: 0.9375rem;
+  transition: all 0.3s ease;
   cursor: pointer;
-  border-radius: 4px;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.tertiary};
+    background-color: #2271d1;
+  }
+
+  @media (max-width: 768px) {
+    width: 9rem;
+    height: 2.5rem;
+    font-size: 1rem;
   }
 `;
 
@@ -74,14 +92,14 @@ function Header() {
   return (
     <HeaderContainer>
       <Nav>
-        <Logo onClick={() => navigate("/")}>AluraFlix</Logo>
+        <LogoText onClick={() => navigate("/")}>AluraFlix</LogoText>
         <NavContainer>
-          <StyledLink to="/" end>
+          <StyledNavLink to="/" end>
             <Button>Home</Button>
-          </StyledLink>
-          <StyledLink to="/new-video">
+          </StyledNavLink>
+          <StyledNavLink to="/new-video">
             <Button>Nuevo Video</Button>
-          </StyledLink>
+          </StyledNavLink>
         </NavContainer>
       </Nav>
     </HeaderContainer>

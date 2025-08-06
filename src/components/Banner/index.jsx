@@ -1,14 +1,12 @@
-// components/Banner/Banner.jsx
 import React from "react";
 import styled from "styled-components";
-import { theme } from '../../styles/Theme';
-
 
 const BannerContainer = styled.section`
   position: relative;
   width: 100%;
-  height: 400px; /* Altura del banner */
+  height: 400px;
   overflow: hidden;
+  margin-bottom: 2rem;
 
   @media (max-width: 768px) {
     height: auto;
@@ -42,19 +40,31 @@ const BannerContent = styled.div`
 
 const TextContainer = styled.div`
   max-width: 50%;
-  
+
   @media (max-width: 768px) {
     max-width: 100%;
+    margin-bottom: 1rem;
   }
 `;
 
+// Función para obtener el color de la categoría
+const getCategoryColor = (category) => {
+  const colors = {
+    "FRONT END": "#6bd1ff",
+    "BACK END": "#00c86f",
+    MOBILE: "#ffba05",
+  };
+  return colors[category] || "#61dafb";
+};
+
 const BannerTitle = styled.h1`
   font-size: 2.5rem;
-  background-color: ${({ theme, category }) =>
-    theme.colors.categoryColors[category]};
+  background-color: ${({ category }) => getCategoryColor(category)};
   padding: 0.5rem 1rem;
   border-radius: 8px;
   display: inline-block;
+  color: #000;
+  font-weight: bold;
 
   @media (max-width: 768px) {
     font-size: 2rem;
@@ -64,6 +74,7 @@ const BannerTitle = styled.h1`
 const BannerDescription = styled.p`
   font-size: 1.2rem;
   margin-top: 1rem;
+  line-height: 1.5;
 
   @media (max-width: 768px) {
     font-size: 1rem;
@@ -71,29 +82,52 @@ const BannerDescription = styled.p`
 `;
 
 const BannerImg = styled.img`
-  width: 600px;
+  width: 400px;
+  height: 225px;
   border-radius: 15px;
   box-shadow: 0px 0px 0.75rem 0.25rem #2271d1;
+  object-fit: cover;
 
   @media (max-width: 768px) {
     width: 100%;
+    max-width: 300px;
+    height: auto;
     margin-top: 1rem;
   }
 `;
 
 const Banner = ({ video }) => {
-
   if (!video) return null;
 
   return (
     <BannerContainer>
-      <BannerBackground src={video.img} alt={`Fondo del banner: ${video.titulo}`} />
+      <BannerBackground
+        src={video.img || video.image || video.thumbnail}
+        alt={`Fondo del banner: ${video.titulo || video.title}`}
+        onError={(e) => {
+          e.target.src =
+            "https://via.placeholder.com/800x400/282c34/61dafb?text=Banner";
+        }}
+      />
       <BannerContent>
         <TextContainer>
-          <BannerTitle category={video.categoria}>{video.categoria}</BannerTitle>
-          <BannerDescription>{video.descripcion}</BannerDescription>
+          <BannerTitle category={video.categoria || video.category}>
+            {video.categoria || video.category || "Video"}
+          </BannerTitle>
+          <BannerDescription>
+            {video.descripcion ||
+              video.description ||
+              "Video destacado de AluraFlix"}
+          </BannerDescription>
         </TextContainer>
-        <BannerImg src={video.img} alt={`Imagen del video: ${video.titulo}`} />
+        <BannerImg
+          src={video.img || video.image || video.thumbnail}
+          alt={`Imagen del video: ${video.titulo || video.title}`}
+          onError={(e) => {
+            e.target.src =
+              "https://via.placeholder.com/400x225/282c34/61dafb?text=Video";
+          }}
+        />
       </BannerContent>
     </BannerContainer>
   );

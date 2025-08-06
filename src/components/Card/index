@@ -1,0 +1,187 @@
+import styled from "styled-components";
+import PropTypes from "prop-types";
+
+const CardContainer = styled.div`
+  position: relative;
+  width: 18.75rem;
+  max-width: 100%;
+  background-color: #282c34;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  border: 2px solid transparent;
+
+  &:hover {
+    transform: scale(1.05);
+    border-color: #61dafb;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 300px;
+  }
+`;
+
+const CardThumbnail = styled.img`
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  loading: lazy; /* Lazy loading nativo */
+  transition: opacity 0.3s ease;
+`;
+
+const CardContent = styled.div`
+  padding: 1rem;
+`;
+
+const CardTitle = styled.h3`
+  font-size: 1.1rem;
+  color: white;
+  margin: 0 0 10px 0;
+  text-align: center;
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const CardDescription = styled.p`
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 15px;
+  text-align: center;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;
+
+const CardActions = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 1rem 1rem;
+`;
+
+const ActionButton = styled.button`
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  flex: 1;
+
+  &.watch {
+    background-color: #61dafb;
+    color: #20232a;
+
+    &:hover {
+      background-color: #21a1f1;
+      transform: translateY(-2px);
+    }
+  }
+
+  &.edit {
+    background-color: #28a745;
+    color: white;
+
+    &:hover {
+      background-color: #218838;
+      transform: translateY(-2px);
+    }
+  }
+
+  &.delete {
+    background-color: #dc3545;
+    color: white;
+
+    &:hover {
+      background-color: #c82333;
+      transform: translateY(-2px);
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+`;
+
+const Card = ({ video, onEdit, onDelete }) => {
+  const handleWatchVideo = () => {
+    const url = video.videoUrl || video.url;
+    if (url) {
+      window.open(url, "_blank");
+    }
+  };
+
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit(video.id);
+    }
+  };
+
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(video.id);
+    }
+  };
+
+  return (
+    <CardContainer>
+      <CardThumbnail
+        src={
+          video.thumbnail ||
+          video.img ||
+          "https://via.placeholder.com/300x200/282c34/61dafb?text=No+Image"
+        }
+        alt={video.title || video.titulo || "Video thumbnail"}
+        loading="lazy"
+        onError={(e) => {
+          e.target.src =
+            "https://via.placeholder.com/300x200/282c34/61dafb?text=No+Image";
+        }}
+      />
+      <CardContent>
+        <CardTitle>{video.title || video.titulo || "Sin título"}</CardTitle>
+        {(video.description || video.descripcion) && (
+          <CardDescription>
+            {video.description || video.descripcion}
+          </CardDescription>
+        )}
+      </CardContent>
+      <CardActions>
+        <ActionButton className="watch" onClick={handleWatchVideo}>
+          Ver Video
+        </ActionButton>
+        <ActionButton className="edit" onClick={handleEdit}>
+          Editar
+        </ActionButton>
+        <ActionButton className="delete" onClick={handleDelete}>
+          Eliminar
+        </ActionButton>
+      </CardActions>
+    </CardContainer>
+  );
+};
+
+Card.propTypes = {
+  video: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    title: PropTypes.string,
+    titulo: PropTypes.string,
+    description: PropTypes.string,
+    descripcion: PropTypes.string,
+    thumbnail: PropTypes.string,
+    img: PropTypes.string,
+    videoUrl: PropTypes.string,
+    url: PropTypes.string,
+  }).isRequired,
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
+};
+
+export default Card;
