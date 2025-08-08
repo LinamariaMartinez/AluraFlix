@@ -78,7 +78,6 @@ src/
 ## 🏆 Contexto del Proyecto
 
 Desarrollado como parte del programa **Oracle Next Education (ONE)** - **Alura Latam**.
-**🥈 2º lugar + Mención especial por integración** en el Alumnithon 2025.
 
 ---
 
