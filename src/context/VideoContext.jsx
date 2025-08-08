@@ -3,35 +3,6 @@ import PropTypes from "prop-types";
 
 const VideoContext = createContext();
 
-// Datos iniciales de ejemplo - movidos fuera del componente para evitar recreación
-const initialVideos = [
-  {
-    id: 1,
-    titulo: "Qué Significa Pensar Como Programador",
-    categoria: "FRONT END",
-    img: "https://i.ytimg.com/vi/ov7vA5HFe6w/maxresdefault.jpg",
-    url: "https://youtube.com/embed/ov7vA5HFe6w",
-    descripcion:
-      "Principales características, habilidades y competencias de un programador",
-  },
-  {
-    id: 2,
-    titulo: "Introducción a React",
-    categoria: "FRONT END",
-    img: "https://i.ytimg.com/vi/6Jfk8ic3KVk/maxresdefault.jpg",
-    url: "https://youtube.com/embed/6Jfk8ic3KVk",
-    descripcion: "Conceptos básicos de React para principiantes",
-  },
-  {
-    id: 3,
-    titulo: "Node.js para Backend",
-    categoria: "BACK END",
-    img: "https://i.ytimg.com/vi/BhvLIzVL8_o/maxresdefault.jpg",
-    url: "https://youtube.com/embed/BhvLIzVL8_o",
-    descripcion: "Fundamentos de Node.js para desarrollo backend",
-  },
-];
-
 export const useVideo = () => {
   const context = useContext(VideoContext);
   if (!context) {
@@ -46,6 +17,35 @@ export const VideoProvider = ({ children }) => {
   const [videoData, setVideoData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Datos iniciales de ejemplo - en un proyecto real vendrían de una API
+  const initialVideos = [
+    {
+      id: 1,
+      titulo: "Qué Significa Pensar Como Programador",
+      categoria: "FRONT END",
+      img: "https://i.ytimg.com/vi/ov7vA5HFe6w/maxresdefault.jpg",
+      url: "https://youtube.com/embed/ov7vA5HFe6w",
+      descripcion:
+        "Principales características, habilidades y competencias de un programador",
+    },
+    {
+      id: 2,
+      titulo: "Introducción a React",
+      categoria: "FRONT END",
+      img: "https://i.ytimg.com/vi/6Jfk8ic3KVk/maxresdefault.jpg",
+      url: "https://youtube.com/embed/6Jfk8ic3KVk",
+      descripcion: "Conceptos básicos de React para principiantes",
+    },
+    {
+      id: 3,
+      titulo: "Node.js para Backend",
+      categoria: "BACK END",
+      img: "https://i.ytimg.com/vi/BhvLIzVL8_o/maxresdefault.jpg",
+      url: "https://youtube.com/embed/BhvLIzVL8_o",
+      descripcion: "Fundamentos de Node.js para desarrollo backend",
+    },
+  ];
 
   useEffect(() => {
     // Cargar datos inmediatamente
@@ -73,7 +73,7 @@ export const VideoProvider = ({ children }) => {
     };
 
     loadVideos();
-  }, []); // Sin dependencias - solo se ejecuta al montar
+  }, []);
 
   // Guardar en localStorage cada vez que cambien los videos
   useEffect(() => {
@@ -146,6 +146,7 @@ export const VideoProvider = ({ children }) => {
   );
 };
 
+// Validación de PropTypes
 VideoProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };

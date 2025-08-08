@@ -112,9 +112,8 @@ const ActionButton = styled.button`
 
 const Card = ({ video, onEdit, onDelete }) => {
   const handleWatchVideo = () => {
-    const url = video.videoUrl || video.url;
-    if (url) {
-      window.open(url, "_blank");
+    if (video.videoUrl) {
+      window.open(video.videoUrl, "_blank");
     }
   };
 
@@ -168,20 +167,22 @@ const Card = ({ video, onEdit, onDelete }) => {
   );
 };
 
+// Validación de PropTypes
 Card.propTypes = {
   video: PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     title: PropTypes.string,
     titulo: PropTypes.string,
-    description: PropTypes.string,
-    descripcion: PropTypes.string,
     thumbnail: PropTypes.string,
     img: PropTypes.string,
+    image: PropTypes.string,
     videoUrl: PropTypes.string,
     url: PropTypes.string,
+    description: PropTypes.string,
+    descripcion: PropTypes.string,
   }).isRequired,
-  onEdit: PropTypes.func,
-  onDelete: PropTypes.func,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default Card;
