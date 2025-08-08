@@ -5,7 +5,7 @@
 Una aplicación web moderna para organizar contenido educativo por categorías, con funcionalidades CRUD completas y diseño responsive.
 
 ## 🚀 Demo en Vivo
-**[Ver Demo](https://tu-aluraflix.netlify.app)** | **[Código Fuente](https://github.com/LinamariaMartinez/AluraFlix)**
+**[Ver Demo](https://aluraflix-linamaria.netlify.app/)** | **[Código Fuente](https://github.com/LinamariaMartinez/AluraFlix)**
 
 ---
 
@@ -33,7 +33,7 @@ Una aplicación web moderna para organizar contenido educativo por categorías, 
 
 ```bash
 # Clonar repositorio
-git clone https://github.com/tu-usuario/aluraflix.git
+git clone https://github.com/LinamariaMartinez/AluraFlix.git
 
 # Instalar dependencias
 cd aluraflix && npm install
@@ -85,7 +85,7 @@ Desarrollado como parte del programa **Oracle Next Education (ONE)** - **Alura L
 ## 🤝 Contacto
 
 **Linamaría Martínez**
-[LinkedIn](https://linkedin.com/in/tu-perfil) • [GitHub](https://github.com/tu-usuario) • [Email](mailto:tu-email@ejemplo.com)
+[LinkedIn](https://www.linkedin.com/in/linamariamartinezp/) • [GitHub](https://github.com/LinamariaMartinez) • [Email](mailto:linamariamartinezp@gmail.com)
 
 ---
 
